@@ -1,7 +1,9 @@
-import { mount } from "./mount";
+import { boot } from "./boot";
 
-export { mount };
-
-if (typeof window !== "undefined") {
-  (window as unknown as { Optio: { mount: typeof mount } }).Optio = { mount };
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
 }
