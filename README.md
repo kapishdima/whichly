@@ -25,6 +25,7 @@ optio/
 │   ├── runtime/     @optio/runtime     — the IIFE bundle clients load on their site
 │   └── react/       @optio/react       — the `<Variant>` component devs use in their code
 ├── biome.json
+├── portless.json        — local HTTPS subdomains for dev
 ├── tsconfig.base.json
 ├── pnpm-workspace.yaml
 └── package.json
@@ -37,31 +38,29 @@ from npm.
 
 ## Requirements
 
-- **Node 22** (see `.nvmrc` — `nvm use` if you have nvm).
+- **Node 24** (see `.nvmrc` — `nvm use` if you have nvm). Portless needs 24+.
 - **pnpm 9** (Corepack will pin this for you via the `packageManager` field in `package.json`).
-
-That's it. No global tools, no CI yet, no Husky.
+- First `pnpm dev` will prompt for your sudo password — Portless needs it once to bind port
+  443 and trust the local CA it generates. Subsequent runs are passwordless.
 
 ## Getting started
 
 ```bash
-nvm use          # picks Node 22
-pnpm install     # installs everything and runs fumadocs-mdx postinstall for docs
-pnpm dev         # starts all 3 apps in parallel
+nvm use          # picks Node 24
+pnpm install     # installs everything, portless included
+pnpm dev         # starts all 3 apps under https://*.optio.localhost
+                 # → first run will ask for your sudo password
 ```
 
-Ports:
-- `web` → http://localhost:3000
-- `dashboard` → http://localhost:3001
-- `docs` → http://localhost:3002
+Local URLs:
+- `web`       → https://optio.localhost
+- `dashboard` → https://app.optio.localhost
+- `docs`      → https://docs.optio.localhost
 
-If you only want one of them, filter:
-
-```bash
-pnpm --filter @optio/web dev
-pnpm --filter @optio/dashboard dev
-pnpm --filter @optio/docs dev
-```
+Underneath, Portless runs each app on its own loopback port (3000/3001/3002 from
+`portless.json#apps.*.appPort`) and reverse-proxies HTTPS to it. If you want to bypass the
+proxy for a quick sanity check, `pnpm --filter @optio/web dev` still works — it'll just
+listen on plain `http://localhost:3000`.
 
 The package filters also work for `build`, `typecheck`, and `lint`.
 

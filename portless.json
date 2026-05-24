@@ -1,0 +1,9 @@
+{
+  "$schema": "https://portless.sh/schema.json",
+  "turbo": false,
+  "apps": {
+    "apps/web": { "name": "optio", "appPort": 3000 },
+    "apps/dashboard": { "name": "app", "appPort": 3001 },
+    "apps/docs": { "name": "docs", "appPort": 3002 }
+  }
+}

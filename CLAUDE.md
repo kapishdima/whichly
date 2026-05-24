@@ -37,10 +37,11 @@ optio/
 │   ├── runtime/              # Vite lib → dist/optio.js (Preact + Shadow DOM, IIFE)
 │   ├── react/                # @optio/react, tsup → ESM+CJS+dts
 │   └── ui/                   # shadcn/ui + общий Tailwind preset
-├── .nvmrc                    # 22
+├── .nvmrc                    # 24
 ├── biome.json
-├── package.json              # packageManager: pnpm@9, engines: node 22
+├── package.json              # packageManager: pnpm@9, engines: node 24
 ├── pnpm-workspace.yaml
+├── portless.json             # dev-only: https://*.optio.localhost
 └── tsconfig.base.json        # strict, moduleResolution: Bundler
 ```
 
@@ -53,10 +54,12 @@ optio/
 - **API типы**: единый источник — Zod-схемы в dashboard. Runtime импортирует только типы через tsconfig path (зависимости остаются standalone в рантайме).
 - **CDN runtime**: Coolify Nginx, одна точка входа `https://cdn.optio.dev/optio.js`. На PoC версионирования нет; добавим, когда появятся реальные клиенты.
 - **Build orchestration**: голый `pnpm -r --filter ...`. Turbo не вводим до первой реальной боли с CI.
+- **Dev URLs**: локально все app поднимаются через **Portless** под HTTPS-сабдоменами, зеркальными проду: `https://optio.localhost` (web), `https://app.optio.localhost` (dashboard), `https://docs.optio.localhost` (docs). Конфиг — `portless.json` в корне. Portless в проде не используется.
 
 ### Стек по умолчанию
 
-- **Node** 22 LTS (`.nvmrc` + `engines`)
+- **Node** 24 LTS (`.nvmrc` + `engines`) — нужно для Portless
+- **Portless** для dev (`pnpm dev` = `portless`)
 - **pnpm** 9.x (`packageManager` в корне)
 - **TypeScript** 5.x, `strict: true`, `moduleResolution: "Bundler"`
 - **Lint/format**: Biome (одна тулза)

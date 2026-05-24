@@ -31,3 +31,4 @@ pnpm-debug.log*
 .turbo/
 coverage/
 .cache/
+.portless/

@@ -4,10 +4,10 @@
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "scripts": {
-    "dev": "pnpm -r --parallel dev",
+    "dev": "portless",
     "build": "pnpm -r --filter \"./packages/*\" build && pnpm -r --filter \"./apps/*\" build",
     "build:packages": "pnpm -r --filter \"./packages/*\" build",
     "build:apps": "pnpm -r --filter \"./apps/*\" build",
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "portless": "^0.13.0",
     "typescript": "^5.6.3"
   }
 }
