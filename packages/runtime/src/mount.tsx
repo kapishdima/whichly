@@ -3,6 +3,8 @@ import { Picker, type PickerProps } from "./picker";
 import type { BlocksMap, State } from "./types";
 
 const HOST_ID = "__optio_picker_host";
+const FONT_LINK_ID = "__optio_fonts";
+const FONT_HREF = "https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap";
 
 export interface MountHandle {
   rerender(blocks: BlocksMap, state: State): void;
@@ -14,7 +16,17 @@ export interface MountOptions {
   onReset: PickerProps["onReset"];
 }
 
+function ensureFonts(): void {
+  if (document.getElementById(FONT_LINK_ID)) return;
+  const link = document.createElement("link");
+  link.id = FONT_LINK_ID;
+  link.rel = "stylesheet";
+  link.href = FONT_HREF;
+  document.head.appendChild(link);
+}
+
 export function createHost(options: MountOptions): MountHandle {
+  ensureFonts();
   const host = document.createElement("div");
   host.id = HOST_ID;
   host.style.cssText = [
