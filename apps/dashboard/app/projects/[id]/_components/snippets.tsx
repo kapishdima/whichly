@@ -1,17 +1,17 @@
 "use client";
 
+import { Button } from "@optio/ui/components/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@optio/ui/components/tabs";
+import { CheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface SnippetsProps {
   projectId: string;
 }
 
-const TABS = ["React", "HTML"] as const;
-type Tab = (typeof TABS)[number];
-
 export function Snippets({ projectId }: SnippetsProps) {
-  const [tab, setTab] = useState<Tab>("React");
-  const [copied, setCopied] = useState(false);
+  const [copiedTab, setCopiedTab] = useState<string | null>(null);
 
   const reactSnippet = `import { OptioProvider } from "@optio/react";
 
@@ -29,42 +29,49 @@ export default function Layout({ children }) {
   async
 ></script>`;
 
-  const code = tab === "React" ? reactSnippet : htmlSnippet;
-
-  async function handleCopy() {
+  async function handleCopy(tab: "react" | "html", code: string) {
     await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    setCopiedTab(tab);
+    toast.success("Snippet copied to clipboard");
+    setTimeout(() => setCopiedTab((curr) => (curr === tab ? null : curr)), 1500);
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <div className="flex gap-1 rounded-md border border-border p-0.5">
-          {TABS.map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => setTab(t)}
-              className={`rounded px-3 py-1 text-xs font-medium ${
-                t === tab ? "bg-secondary text-foreground" : "text-muted-foreground"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-        <button
+    <Tabs defaultValue="react">
+      <TabsList className="w-full">
+        <TabsTrigger value="react">React</TabsTrigger>
+        <TabsTrigger value="html">HTML</TabsTrigger>
+      </TabsList>
+      <TabsContent value="react" className="relative">
+        <pre className="overflow-x-auto rounded-md border bg-muted/50 p-4 text-xs leading-5">
+          <code>{reactSnippet}</code>
+        </pre>
+        <Button
           type="button"
-          onClick={handleCopy}
-          className="text-xs text-muted-foreground hover:text-foreground"
+          size="icon-sm"
+          variant="ghost"
+          className="absolute right-2 top-2"
+          onClick={() => handleCopy("react", reactSnippet)}
+          aria-label="Copy React snippet"
         >
-          {copied ? "Copied!" : "Copy"}
-        </button>
-      </div>
-      <pre className="overflow-x-auto rounded-md bg-secondary p-4 text-xs">
-        <code>{code}</code>
-      </pre>
-    </div>
+          {copiedTab === "react" ? <CheckIcon /> : <CopyIcon />}
+        </Button>
+      </TabsContent>
+      <TabsContent value="html" className="relative">
+        <pre className="overflow-x-auto rounded-md border bg-muted/50 p-4 text-xs leading-5">
+          <code>{htmlSnippet}</code>
+        </pre>
+        <Button
+          type="button"
+          size="icon-sm"
+          variant="ghost"
+          className="absolute right-2 top-2"
+          onClick={() => handleCopy("html", htmlSnippet)}
+          aria-label="Copy HTML snippet"
+        >
+          {copiedTab === "html" ? <CheckIcon /> : <CopyIcon />}
+        </Button>
+      </TabsContent>
+    </Tabs>
   );
 }

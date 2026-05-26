@@ -1,5 +1,5 @@
+import { Toaster } from "@optio/ui/components/sonner";
 import type { Metadata } from "next";
-import Script from "next/script";
 import type { ReactNode } from "react";
 import "./globals.css";
 
@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className="bg-background text-foreground antialiased">
         {children}
-        <Script src="https://ui.sh/ui-picker.js" />
+        <Toaster />
       </body>
     </html>
   );

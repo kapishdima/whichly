@@ -1,25 +1,36 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { Button } from "@optio/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@optio/ui/components/card";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@optio/ui/components/field";
+import { Input } from "@optio/ui/components/input";
+import { Separator } from "@optio/ui/components/separator";
+import { GithubIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import { toast } from "sonner";
 
 export default function SignUpPage() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setError(null);
     setSubmitting(true);
     const result = await authClient.signUp.email({ email, password, name });
     setSubmitting(false);
     if (result.error) {
-      setError(result.error.message ?? "Sign-up failed");
+      toast.error(result.error.message ?? "Sign-up failed");
       return;
     }
     router.push("/");
@@ -31,84 +42,66 @@ export default function SignUpPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Create account</h1>
-          <p className="text-sm text-muted-foreground">Start collecting review feedback.</p>
-        </div>
+    <main className="flex min-h-dvh items-center justify-center p-6">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-balance text-2xl tracking-tight">Create account</CardTitle>
+          <CardDescription>Start collecting review feedback.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-5">
+          <Button type="button" variant="outline" onClick={handleGithub}>
+            <GithubIcon data-icon="inline-start" />
+            Continue with GitHub
+          </Button>
 
-        <button
-          type="button"
-          onClick={handleGithub}
-          className="w-full rounded-md border border-border bg-secondary px-3 py-2 text-sm font-medium text-secondary-foreground hover:opacity-90"
-        >
-          Continue with GitHub
-        </button>
-
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          or
-          <span className="h-px flex-1 bg-border" />
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="space-y-1">
-            <label htmlFor="name" className="text-sm font-medium">
-              Name
-            </label>
-            <input
-              id="name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-            />
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <Separator className="flex-1" />
+            or
+            <Separator className="flex-1" />
           </div>
-          <div className="space-y-1">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
-          <div className="space-y-1">
-            <label htmlFor="password" className="text-sm font-medium">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
-          {error && <p className="text-sm text-destructive">{error}</p>}
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
-          >
-            {submitting ? "Creating..." : "Create account"}
-          </button>
-        </form>
 
-        <p className="text-center text-sm text-muted-foreground">
-          Already have one?{" "}
-          <a href="/sign-in" className="font-medium text-foreground underline">
-            Sign in
-          </a>
-        </p>
-      </div>
+          <form onSubmit={handleSubmit}>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="name">Name</FieldLabel>
+                <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  minLength={8}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <FieldDescription>At least 8 characters.</FieldDescription>
+              </Field>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Creating..." : "Create account"}
+              </Button>
+            </FieldGroup>
+          </form>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Already have one?{" "}
+            <a href="/sign-in" className="font-medium text-foreground underline underline-offset-4">
+              Sign in
+            </a>
+          </p>
+        </CardContent>
+      </Card>
     </main>
   );
 }

@@ -1,7 +1,22 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@optio/ui/components/alert-dialog";
+import { Button } from "@optio/ui/components/button";
+import { Input } from "@optio/ui/components/input";
+import { CheckIcon, PencilIcon, Trash2Icon, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import { toast } from "sonner";
 
 interface ProjectActionsProps {
   projectId: string;
@@ -18,6 +33,7 @@ export function ProjectActions({ projectId, initialName }: ProjectActionsProps) 
     e.preventDefault();
     if (!name.trim() || name === initialName) {
       setEditing(false);
+      setName(initialName);
       return;
     }
     setSubmitting(true);
@@ -28,19 +44,23 @@ export function ProjectActions({ projectId, initialName }: ProjectActionsProps) 
     });
     setSubmitting(false);
     if (res.ok) {
+      toast.success("Project renamed");
       setEditing(false);
       router.refresh();
+    } else {
+      toast.error("Failed to rename project");
     }
   }
 
   async function handleDelete() {
-    if (!confirm("Delete this project and all its reviews?")) return;
     setSubmitting(true);
     const res = await fetch(`/api/projects/${projectId}`, { method: "DELETE" });
     if (res.ok) {
+      toast.success("Project deleted");
       router.push("/");
       router.refresh();
     } else {
+      toast.error("Failed to delete project");
       setSubmitting(false);
     }
   }
@@ -48,46 +68,71 @@ export function ProjectActions({ projectId, initialName }: ProjectActionsProps) 
   if (editing) {
     return (
       <form onSubmit={handleRename} className="flex items-center gap-2">
-        <input
+        <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="rounded-md border border-input bg-background px-2 py-1 text-lg font-semibold outline-none focus:ring-2 focus:ring-ring"
+          aria-label="Project name"
+          className="h-10 max-w-md text-2xl font-semibold tracking-tight"
         />
-        <button type="submit" disabled={submitting} className="text-sm font-medium text-foreground">
-          Save
-        </button>
-        <button
+        <Button type="submit" size="icon" variant="default" disabled={submitting} aria-label="Save">
+          <CheckIcon />
+        </Button>
+        <Button
           type="button"
+          size="icon"
+          variant="ghost"
           onClick={() => {
             setName(initialName);
             setEditing(false);
           }}
-          className="text-sm text-muted-foreground"
+          aria-label="Cancel"
         >
-          Cancel
-        </button>
+          <XIcon />
+        </Button>
       </form>
     );
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <h1 className="text-2xl font-semibold tracking-tight">{initialName}</h1>
-      <button
+    <div className="flex items-center gap-2">
+      <h1 className="text-balance text-3xl font-semibold tracking-tight">{initialName}</h1>
+      <Button
         type="button"
+        size="icon-sm"
+        variant="ghost"
         onClick={() => setEditing(true)}
-        className="text-sm text-muted-foreground hover:text-foreground"
+        aria-label="Rename project"
       >
-        Rename
-      </button>
-      <button
-        type="button"
-        onClick={handleDelete}
-        disabled={submitting}
-        className="text-sm text-destructive hover:opacity-80 disabled:opacity-50"
-      >
-        Delete
-      </button>
+        <PencilIcon />
+      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            type="button"
+            size="icon-sm"
+            variant="ghost"
+            aria-label="Delete project"
+            className="text-muted-foreground hover:text-destructive"
+          >
+            <Trash2Icon />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this project?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently deletes <span className="font-medium">{initialName}</span> and all
+              its reviews. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={submitting}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

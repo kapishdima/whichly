@@ -1,6 +1,8 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { Button } from "@optio/ui/components/button";
+import { LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function SignOutButton() {
@@ -11,12 +13,9 @@ export function SignOutButton() {
     router.refresh();
   }
   return (
-    <button
-      type="button"
-      onClick={handle}
-      className="text-sm text-muted-foreground hover:text-foreground"
-    >
+    <Button type="button" variant="ghost" size="sm" onClick={handle}>
+      <LogOutIcon data-icon="inline-start" />
       Sign out
-    </button>
+    </Button>
   );
 }
