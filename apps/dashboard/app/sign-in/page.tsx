@@ -44,7 +44,7 @@ export default function SignInPage() {
     <main className="flex min-h-dvh items-center justify-center p-6">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-balance text-2xl tracking-tight">Sign in</CardTitle>
+          <CardTitle className="text-balance text-2xl ">Sign in</CardTitle>
           <CardDescription>Welcome back to Optio.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-5">

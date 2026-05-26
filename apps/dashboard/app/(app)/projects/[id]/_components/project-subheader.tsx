@@ -15,7 +15,7 @@ export function ProjectSubheader({
 }: ProjectSubheaderProps) {
   return (
     <div className="flex w-full items-center justify-between gap-4">
-      <h1 className="min-w-0 truncate text-lg font-semibold tracking-tight">{projectName}</h1>
+      <h1 className="min-w-0 truncate text-lg font-semibold ">{projectName}</h1>
       {showSettingsLink ? (
         <Button variant="outline" size="sm" asChild>
           <Link href={`/projects/${projectId}/settings`}>

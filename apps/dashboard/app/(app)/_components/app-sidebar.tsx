@@ -59,7 +59,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                   <HugeiconsIcon icon={ColorPickerIcon} size={18} strokeWidth={2} />
                 </span>
                 <span className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold tracking-tight">optio</span>
+                  <span className="text-sm font-semibold ">optio</span>
                   <span className="text-xs text-muted-foreground">Block reviews</span>
                 </span>
               </Link>

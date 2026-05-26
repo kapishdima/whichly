@@ -20,15 +20,17 @@ export default async function ProjectsListPage() {
     <>
       <PageHeader crumbs={[{ label: "Projects" }]} />
       <div className="flex flex-1 flex-col gap-8 px-4 py-8 lg:px-6 lg:py-10">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
+        <div className="flex w-full flex-col gap-8">
           <header className="flex flex-col gap-1">
-            <h1 className="text-balance text-2xl font-semibold tracking-tight">Projects</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-balance text-2xl font-semibold">Projects</h1>
+            <p className="text-pretty text-sm text-muted-foreground">
               Spin up a new project and share the staging link with your client.
             </p>
           </header>
 
-          <NewProjectForm />
+          <div className="max-w-2xl">
+            <NewProjectForm />
+          </div>
 
           {projects.length === 0 ? (
             <Empty>
@@ -38,33 +40,33 @@ export default async function ProjectsListPage() {
               </EmptyContent>
             </Empty>
           ) : (
-            <Card className="gap-0 py-0">
-              <CardContent className="p-0">
-                <ul role="list" className="divide-y">
-                  {projects.map((p) => (
-                    <li key={p.id}>
-                      <Link
-                        href={`/projects/${p.id}`}
-                        className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-muted/40"
-                      >
-                        <div className="flex flex-col gap-0.5">
-                          <span className="font-medium">{p.name}</span>
-                          <span className="text-xs text-muted-foreground tabular-nums">
-                            Created {new Date(p.createdAt).toLocaleDateString()}
-                          </span>
+            <ul role="list" className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {projects.map((p) => (
+                <li key={p.id}>
+                  <Link
+                    href={`/projects/${p.id}`}
+                    className="group block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    <Card className="h-full gap-0 py-0 transition-colors group-hover:bg-muted/40">
+                      <CardContent className="flex h-full flex-col gap-6 p-5">
+                        <div className="flex items-start justify-between gap-3">
+                          <span className="line-clamp-2 text-balance font-medium">{p.name}</span>
+                          <ChevronRightIcon className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="mt-auto flex items-center justify-between gap-3">
+                          <span className="text-xs text-muted-foreground tabular-nums">
+                            {new Date(p.createdAt).toLocaleDateString()}
+                          </span>
                           <Badge variant="secondary" className="tabular-nums">
                             {p._count.reviews} {p._count.reviews === 1 ? "review" : "reviews"}
                           </Badge>
-                          <ChevronRightIcon className="size-4 text-muted-foreground" />
                         </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       </div>

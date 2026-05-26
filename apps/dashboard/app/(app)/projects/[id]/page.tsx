@@ -2,8 +2,11 @@ import { prisma } from "@/lib/db";
 import type { ReviewItem } from "@/lib/schemas/review";
 import { requireSession } from "@/lib/session";
 import { Badge } from "@optio/ui/components/badge";
+import { Button } from "@optio/ui/components/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@optio/ui/components/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyTitle } from "@optio/ui/components/empty";
+import { SettingsIcon } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader } from "../../_components/page-header";
 import { ProjectSubheader } from "./_components/project-subheader";
@@ -45,27 +48,27 @@ export default async function ProjectPage({ params }: PageProps) {
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <Card className="gap-0 py-5">
                 <CardHeader className="px-5">
-                  <CardDescription className="truncate text-xs font-medium uppercase tracking-wide">
+                  <CardDescription className="truncate text-xs font-medium ">
                     Reviews
                   </CardDescription>
-                  <CardTitle className="text-3xl font-semibold tabular-nums tracking-tight">
+                  <CardTitle className="text-3xl font-semibold tabular-nums ">
                     {reviews.length}
                   </CardTitle>
                 </CardHeader>
               </Card>
               <Card className="gap-0 py-5">
                 <CardHeader className="px-5">
-                  <CardDescription className="truncate text-xs font-medium uppercase tracking-wide">
+                  <CardDescription className="truncate text-xs font-medium ">
                     Blocks
                   </CardDescription>
-                  <CardTitle className="text-3xl font-semibold tabular-nums tracking-tight">
+                  <CardTitle className="text-3xl font-semibold tabular-nums ">
                     {blockCount}
                   </CardTitle>
                 </CardHeader>
               </Card>
               <Card className="gap-0 py-5">
                 <CardHeader className="px-5">
-                  <CardDescription className="truncate text-xs font-medium uppercase tracking-wide">
+                  <CardDescription className="truncate text-xs font-medium ">
                     Last submitted
                   </CardDescription>
                   <CardTitle className="text-base font-medium">
@@ -86,9 +89,7 @@ export default async function ProjectPage({ params }: PageProps) {
           </section>
 
           <section className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Reviews
-            </h2>
+            <h2 className="text-sm font-semibold  text-muted-foreground">Reviews</h2>
             {reviews.length === 0 ? (
               <Empty>
                 <EmptyContent>
@@ -97,6 +98,12 @@ export default async function ProjectPage({ params }: PageProps) {
                     Embed the snippet from Settings → Embed, deploy to staging, and share the URL
                     with your client.
                   </EmptyDescription>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/projects/${project.id}/settings`}>
+                      <SettingsIcon data-icon="inline-start" />
+                      Settings
+                    </Link>
+                  </Button>
                 </EmptyContent>
               </Empty>
             ) : (
