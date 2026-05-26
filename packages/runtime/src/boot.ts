@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import { applyCSS, removeActiveStyle, removeFouc } from "./css";
 import { createHost } from "./mount";
 import { makeObserver } from "./observer";
@@ -5,24 +6,23 @@ import { sameShape, scanBlocks } from "./scan";
 import { mergeState, resolveState, syncURL, writeStorage } from "./state";
 import type { BlocksMap, State } from "./types";
 
-const TOKEN_PARAM = "vp_token";
-
-function getToken(): string | null {
-  try {
-    return new URL(location.href).searchParams.get(TOKEN_PARAM);
-  } catch {
-    return null;
+function getProjectId(): string | null {
+  for (const s of document.querySelectorAll<HTMLScriptElement>("script[data-project-id]")) {
+    if (s.src.includes("optio")) {
+      return s.dataset.projectId ?? null;
+    }
   }
+  return null;
 }
 
 export function boot(): void {
-  const token = getToken();
-  if (!token) return;
+  const projectId = getProjectId();
+  if (!projectId) return;
 
   let blocks: BlocksMap = scanBlocks();
   if (blocks.size === 0) return;
 
-  const storageKey = `__optio:${token}`;
+  const storageKey = `__optio:${projectId}`;
   let state: State = resolveState(blocks, storageKey);
 
   removeFouc();
@@ -45,6 +45,16 @@ export function boot(): void {
       syncURL(state);
       writeStorage(storageKey, state);
       host.rerender(blocks, state);
+    },
+    async onReview(items) {
+      const response = await fetch(`${API_URL}/api/reviews`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ projectId, items }),
+      });
+      if (!response.ok) {
+        throw new Error(`optio: review submit failed (${response.status})`);
+      }
     },
   });
   host.rerender(blocks, state);

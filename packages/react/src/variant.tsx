@@ -1,10 +1,18 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useBlockContext } from "./block";
 
 export interface VariantProps {
-  id: string;
+  name: string;
   children: ReactNode;
 }
 
-export function Variant({ children }: VariantProps) {
-  return <>{children}</>;
+export function Variant({ name, children }: VariantProps) {
+  const { name: blockName } = useBlockContext();
+  return (
+    <div data-vp-block={blockName} data-vp-variant={name}>
+      {children}
+    </div>
+  );
 }
