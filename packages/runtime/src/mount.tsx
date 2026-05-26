@@ -4,7 +4,8 @@ import type { BlocksMap, State } from "./types";
 
 const HOST_ID = "__optio_picker_host";
 const FONT_LINK_ID = "__optio_fonts";
-const FONT_HREF = "https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap";
+const FONT_HREF =
+  "https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Oxanium:wght@200..800&display=swap";
 
 export interface MountHandle {
   rerender(blocks: BlocksMap, state: State): void;
@@ -13,7 +14,8 @@ export interface MountHandle {
 
 export interface MountOptions {
   onSelect: PickerProps["onSelect"];
-  onReset: PickerProps["onReset"];
+  onResetBlock: PickerProps["onResetBlock"];
+  onReview?: PickerProps["onReview"];
 }
 
 function ensureFonts(): void {
@@ -31,8 +33,10 @@ export function createHost(options: MountOptions): MountHandle {
   host.id = HOST_ID;
   host.style.cssText = [
     "position: fixed",
-    "bottom: 16px",
-    "right: 16px",
+    "left: 0",
+    "right: 0",
+    "bottom: 0",
+    "height: 0",
     "z-index: 2147483647",
     "pointer-events: none",
   ].join(";");
@@ -50,7 +54,8 @@ export function createHost(options: MountOptions): MountHandle {
           blocks={blocks}
           state={state}
           onSelect={options.onSelect}
-          onReset={options.onReset}
+          onResetBlock={options.onResetBlock}
+          onReview={options.onReview}
         />,
         root,
       );

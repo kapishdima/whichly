@@ -2,7 +2,7 @@ import { applyCSS, removeActiveStyle, removeFouc } from "./css";
 import { createHost } from "./mount";
 import { makeObserver } from "./observer";
 import { sameShape, scanBlocks } from "./scan";
-import { defaults, mergeState, resolveState, syncURL, writeStorage } from "./state";
+import { mergeState, resolveState, syncURL, writeStorage } from "./state";
 import type { BlocksMap, State } from "./types";
 
 const TOKEN_PARAM = "vp_token";
@@ -37,8 +37,10 @@ export function boot(): void {
       writeStorage(storageKey, state);
       host.rerender(blocks, state);
     },
-    onReset() {
-      state = defaults(blocks);
+    onResetBlock(block) {
+      const first = blocks.get(block)?.[0];
+      if (first === undefined) return;
+      state = { ...state, [block]: first };
       applyCSS(state);
       syncURL(state);
       writeStorage(storageKey, state);
