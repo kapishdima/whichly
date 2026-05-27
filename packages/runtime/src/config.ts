@@ -1,1 +1,1 @@
-export const API_URL = "https://optio.localhost";
+export const API_URL = "https://app.localhost"

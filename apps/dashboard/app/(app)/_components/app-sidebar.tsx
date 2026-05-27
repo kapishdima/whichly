@@ -26,15 +26,21 @@ import {
 import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { OnboardingCompact } from "./onboarding/onboarding-compact";
 
 interface AppSidebarProps {
   user: {
     name?: string | null;
     email?: string | null;
   };
+  onboarding: {
+    hasProject: boolean;
+    hasReview: boolean;
+    firstProjectId?: string;
+  };
 }
 
-export function AppSidebar({ user }: AppSidebarProps) {
+export function AppSidebar({ user, onboarding }: AppSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const displayName = user.name || user.email || "Account";
@@ -49,19 +55,18 @@ export function AppSidebar({ user }: AppSidebarProps) {
   const isProjects = pathname === "/" || pathname.startsWith("/projects");
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/" aria-label="Optio home">
-                <span className="flex aspect-square size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                  <HugeiconsIcon icon={ColorPickerIcon} size={18} strokeWidth={2} />
-                </span>
-                <span className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold ">optio</span>
-                  <span className="text-xs text-muted-foreground">Block reviews</span>
-                </span>
+                <HugeiconsIcon
+                  icon={ColorPickerIcon}
+                  strokeWidth={2}
+                  className="size-6! shrink-0 text-primary"
+                />
+                <span className="text-lg font-semibold">optio</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -87,6 +92,11 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
       <SidebarFooter>
         <SidebarMenu>
+          <OnboardingCompact
+            hasProject={onboarding.hasProject}
+            hasReview={onboarding.hasReview}
+            firstProjectId={onboarding.firstProjectId}
+          />
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

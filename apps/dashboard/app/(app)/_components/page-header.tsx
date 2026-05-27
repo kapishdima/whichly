@@ -1,3 +1,5 @@
+import { ColorPickerIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@optio/ui/components/breadcrumb";
+import { Button } from "@optio/ui/components/button";
 import { Separator } from "@optio/ui/components/separator";
 import { SidebarTrigger } from "@optio/ui/components/sidebar";
 import Link from "next/link";
@@ -18,14 +21,20 @@ export interface BreadcrumbCrumb {
 
 interface PageHeaderProps {
   crumbs: BreadcrumbCrumb[];
+  action?: ReactNode;
   subheader?: ReactNode;
 }
 
-export function PageHeader({ crumbs, subheader }: PageHeaderProps) {
+export function PageHeader({ crumbs, action, subheader }: PageHeaderProps) {
   return (
-    <div className="sticky top-0 z-10 flex flex-col bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <div className="sticky top-0 z-10 flex flex-col rounded-t-xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4 lg:px-6">
-        <SidebarTrigger className="-ml-1" />
+        <Button asChild variant="secondary">
+          <Link href="/" aria-label="Optio home">
+            <HugeiconsIcon icon={ColorPickerIcon} strokeWidth={2} />
+            optio
+          </Link>
+        </Button>
         <Separator orientation="vertical" className="mr-1 data-[orientation=vertical]:h-4" />
         <Breadcrumb>
           <BreadcrumbList>
@@ -52,6 +61,7 @@ export function PageHeader({ crumbs, subheader }: PageHeaderProps) {
             })}
           </BreadcrumbList>
         </Breadcrumb>
+        {action ? <div className="ml-auto flex items-center gap-2">{action}</div> : null}
       </header>
       {subheader ? (
         <div className="flex min-h-16 items-center justify-between gap-4 border-b px-4 py-3 lg:px-6">
