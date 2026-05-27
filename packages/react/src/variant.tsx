@@ -9,9 +9,14 @@ export interface VariantProps {
 }
 
 export function Variant({ name, children }: VariantProps) {
-  const { name: blockName } = useBlockContext();
+  const { name: blockName, active } = useBlockContext();
+  const isActive = name === active;
   return (
-    <div data-vp-block={blockName} data-vp-variant={name}>
+    <div
+      data-vp-block={blockName}
+      data-vp-variant={name}
+      style={{ display: isActive ? "contents" : "none" }}
+    >
       {children}
     </div>
   );

@@ -7,17 +7,21 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "portless",
+    "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --filter \"./packages/*\" build && pnpm -r --filter \"./apps/*\" build",
     "build:packages": "pnpm -r --filter \"./packages/*\" build",
     "build:apps": "pnpm -r --filter \"./apps/*\" build",
     "lint": "biome check .",
     "format": "biome format --write .",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build:packages && changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "portless": "^0.13.0",
+    "@changesets/changelog-github": "^0.6.0",
+    "@changesets/cli": "^2.31.0",
     "typescript": "^5.6.3"
   }
 }
