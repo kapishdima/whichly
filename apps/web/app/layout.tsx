@@ -9,10 +9,35 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
+const title = "Whichly — Live variant picker for React";
+const description =
+  "Show clients multiple block variants on a real staging page and let them toggle live. Open source React picker.";
+
 export const metadata: Metadata = {
-  title: "Whichly — Live variant picker for React",
-  description:
-    "Show clients multiple block variants on a real staging page and let them toggle live. Open source React picker.",
+  metadataBase: new URL("https://whichly.xyz"),
+  title,
+  description,
+  openGraph: {
+    type: "website",
+    url: "/",
+    title,
+    description,
+    siteName: "Whichly",
+    images: [
+      {
+        url: "/hero.png",
+        width: 2880,
+        height: 1614,
+        alt: "Whichly — Let your clients choose for themselves",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/hero.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

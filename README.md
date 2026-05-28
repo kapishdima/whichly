@@ -1,3 +1,5 @@
+![Whichly — Let your clients choose for themselves](apps/web/public/hero.png)
+
 # Whichly
 
 Live variant picker for React. Wrap blocks in `<Block>` / `<Variant>`, deploy to a staging

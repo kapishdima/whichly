@@ -59,7 +59,7 @@ export async function HeroSection() {
                     className="rounded-full"
                     render={
                       <Link
-                        href={siteConfig.links.github}
+                        href={siteConfig.links.docs}
                         target="_blank"
                         rel="noreferrer"
                       />
@@ -94,7 +94,7 @@ export async function HeroSection() {
                     className="rounded-full"
                     render={
                       <Link
-                        href={siteConfig.links.github}
+                        href={siteConfig.links.docs}
                         target="_blank"
                         rel="noreferrer"
                       />
@@ -129,7 +129,7 @@ export async function HeroSection() {
                     className="rounded-full"
                     render={
                       <Link
-                        href={siteConfig.links.github}
+                        href={siteConfig.links.docs}
                         target="_blank"
                         rel="noreferrer"
                       />

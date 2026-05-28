@@ -117,7 +117,7 @@ export const SiteHeader = () => {
                 </Button>
                 <Button
                   size="sm"
-                  render={<Link href={siteConfig.links.github} target="_blank" rel="noreferrer" />}
+                  render={<Link href={siteConfig.links.docs} target="_blank" rel="noreferrer" />}
                   nativeButton={false}
                 >
                   <span>Get started</span>
