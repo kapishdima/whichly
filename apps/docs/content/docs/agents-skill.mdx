@@ -1,0 +1,82 @@
+---
+title: Agents skill
+description: Wrap a section in Block / Variant and generate distinct alternatives with one prompt, using the Whichly skill for Claude Code.
+---
+
+Writing variants by hand is the slow part of Whichly: you wrap a section in `<Block>` /
+`<Variant>`, then think up genuinely different angles for each alternative. The **Whichly
+skill** for [Claude Code](https://claude.com/claude-code) does both in one pass — it wraps an
+existing section and generates distinct alternative variants for you.
+
+## Install
+
+The skill is published from this repository and installs with the
+[`skills`](https://skills.sh) CLI:
+
+```bash
+npx skills add kapishdima/whichly
+```
+
+This drops the skill into `~/.claude/skills/whichly/`, where Claude Code picks it up
+automatically — no restart needed.
+
+<Callout type="info">
+  The skill assumes a project that already uses `@whichly/react`. See
+  [Installation](/docs/installation) to add the library first.
+</Callout>
+
+## Use it
+
+Open Claude Code in your project and either invoke the skill directly:
+
+```text
+/whichly
+```
+
+or just describe what you want in plain language — the skill triggers on phrases like *"make
+variants"*, *"add a variant"*, or *"wrap this in a Block"*:
+
+```text
+Wrap the pricing section in a Block and give me 2 alternative variants.
+```
+
+Claude will:
+
+1. **Wrap** the target section as a `<Block>`, keeping its current markup as the `main`
+   variant and leaving the shared chrome (`<section>`, container, anchor) outside the block.
+2. **Interview you first** — it proposes each alternative as a one-line hypothesis with a
+   short kebab-case name (e.g. `benefit-led`, `social-proof`) and waits for you to confirm,
+   rename, or redirect before writing anything.
+3. **Generate** one `<Variant>` per agreed angle — distinct layout and copy, matching your
+   file's existing components and Tailwind conventions.
+
+It defaults to **2 alternatives** (3 total including `main`), or honors an explicit count if
+you ask for one.
+
+## From a shadcn registry
+
+If you point the skill at a [shadcn](https://ui.shadcn.com) registry handle, it sources a
+variant from that registry instead of writing one from scratch:
+
+```text
+Add a variant for the FAQ block using @efferd.
+```
+
+It delegates to the `shadcn` skill to add the block (respecting your
+`apps/web/components.json` registries and aliases), then composes a `<Variant>` around it. If
+the registry isn't configured or the block can't be resolved, it stops and asks how to
+proceed rather than silently falling back.
+
+## What it won't do
+
+- It never adds an extra layout wrapper around variant content — variants rely on
+  `display: contents`, so each one is a drop-in replacement for the original markup.
+- It won't add a `"use client"` directive to a Server Component just to use `Block` /
+  `Variant` (they're already client components internally — see [Next.js / RSC](/docs/rsc)).
+- It won't touch existing variants when a section is already wrapped — it only appends new
+  ones.
+
+<Cards>
+  <Card title="Quick start" href="/docs/quick-start" />
+  <Card title="Core concepts" href="/docs/concepts" />
+</Cards>
