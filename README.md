@@ -1,70 +1,174 @@
 # Whichly
 
-A tool that lets you ship multiple variants of a site block to
-a real staging environment so a client can pick one before launch.
+Live variant picker for React. Wrap blocks in `<Block>` / `<Variant>`, deploy to a staging
+URL, and let clients toggle between variants live — on the real page, in the real layout,
+with real data. The selected variants are encoded in the URL (`?vp=block:variant,...`), so any
+combination is just a shareable link.
 
-The dev writes variants in code, the client opens a staging link with a token, flips between
-the variants live on the actual page, and leaves a choice plus comments. The dev reads the
-feedback in a dashboard. That's the whole loop.
+There is **no backend, no dashboard, and no auth** — just one React npm package. The picker
+mounts into a Shadow DOM, so its styles never leak in or out of the host page.
 
 This is **not** Figma (variants live in real code on a real site, not in mockups), not A/B
 testing (the goal is agreement with one client, not statistics over traffic), and not a
 sandbox (variants render in the context of the real site with its real styles, data, and
-integrations)
+integrations).
 
-## Layout
+## Installation
+
+```bash
+# pnpm
+pnpm add @whichly/react
+
+# npm
+npm install @whichly/react
+
+# yarn
+yarn add @whichly/react
+```
+
+Whichly works with **React 18 and 19** (declared as peer dependencies). The package ships its
+own type declarations — no `@types/*` needed.
+
+The picker UI ships its styles **inlined and scoped to a shadow DOM**, so there is nothing to
+import and nothing to configure in Tailwind or your global CSS.
+
+## Usage
+
+There are three pieces:
+
+1. **`WhichlyProvider`** — wraps your app, holds the variant state, and renders the picker.
+2. **`Block`** — a named group of mutually-exclusive variants.
+3. **`Variant`** — one option inside a block.
+
+Wrap your app (or any subtree) in `WhichlyProvider`, then wrap each swappable region in a named
+`Block` containing one or more named `Variant`s. A floating picker appears so you can switch the
+active variant.
+
+```tsx
+import { WhichlyProvider, Block, Variant } from "@whichly/react";
+
+export default function Page() {
+  return (
+    <WhichlyProvider>
+      <Block name="Hero">
+        <Variant name="Bold">
+          <h1>Ship faster.</h1>
+        </Variant>
+        <Variant name="Friendly">
+          <h1>Let's build something great together.</h1>
+        </Variant>
+      </Block>
+    </WhichlyProvider>
+  );
+}
+```
+
+The **first variant is active by default**. As you switch variants, Whichly writes your
+selection into the URL:
+
+```
+https://staging.example.com/?vp=Hero:Friendly
+```
+
+Copy that link and send it to your client — when they open it, the page loads with the
+`Friendly` hero already selected.
+
+### Multiple blocks
+
+Add as many blocks as you like. Each gets its own stepper in the picker and its own segment in
+the URL (e.g. `?vp=Hero:Friendly,CTA:Subtle`).
+
+```tsx
+<WhichlyProvider>
+  <Block name="Hero">
+    <Variant name="Bold">{/* ... */}</Variant>
+    <Variant name="Friendly">{/* ... */}</Variant>
+  </Block>
+
+  <Block name="CTA">
+    <Variant name="Primary">
+      <button>Get started</button>
+    </Variant>
+    <Variant name="Subtle">
+      <a href="/signup">Sign up →</a>
+    </Variant>
+  </Block>
+</WhichlyProvider>
+```
+
+### Preselecting variants
+
+Pass `initialState` to choose which variant is active before any URL is applied (the URL still
+takes precedence when present):
+
+```tsx
+<WhichlyProvider initialState={{ Hero: "Friendly" }}>{/* ... */}</WhichlyProvider>
+```
+
+### Placing the picker yourself
+
+By default the provider renders a floating dock pinned to the bottom of the viewport. To place
+the picker somewhere specific in your layout, set `floating={false}` and drop a
+`<WhichlyPicker>` wherever you want it:
+
+```tsx
+import { WhichlyProvider, WhichlyPicker, Block, Variant } from "@whichly/react";
+
+<WhichlyProvider floating={false}>
+  <header>
+    <WhichlyPicker />
+  </header>
+
+  <Block name="Hero">{/* ... */}</Block>
+</WhichlyProvider>;
+```
+
+### Next.js / RSC
+
+`WhichlyProvider`, `Block`, and `Variant` are client components (`"use client"`). Server
+Components can import and render `Block` / `Variant` directly. `Block` and `Variant` are also
+available under a `Whichly` namespace, which reads nicer in larger trees — but the namespaced
+form only works from client components.
+
+```tsx
+import { Whichly } from "@whichly/react";
+
+<Whichly.Block name="Hero">
+  <Whichly.Variant name="Bold">{/* ... */}</Whichly.Variant>
+</Whichly.Block>;
+```
+
+Full documentation lives at [docs.whichly.dev](https://docs.whichly.dev).
+
+## Repository layout
 
 ```
 whichly/
 ├── apps/
-│   ├── web/         whichly.dev          — marketing landing (Next.js 16)
-│   ├── docs/        docs.whichly.dev     — public docs (Fumadocs on Next.js 16)
-│   └── dashboard/   app.whichly.dev      — auth-gated dashboard + API (Next.js 16)
+│   ├── web/      whichly.dev        — marketing landing (Next.js, dog-foods @whichly/react)
+│   └── docs/     docs.whichly.dev   — public docs (Fumadocs on Next.js)
 ├── packages/
-│   ├── ui/          @whichly/ui          — shadcn components + Tailwind v4 base styles
-│   ├── runtime/     @whichly/runtime     — the IIFE bundle clients load on their site
-│   └── react/       @whichly/react       — the `<Variant>` component devs use in their code
+│   └── react/    @whichly/react     — the library published to npm
 ├── biome.json
-├── portless.json        — local HTTPS subdomains for dev
 ├── tsconfig.base.json
 ├── pnpm-workspace.yaml
 └── package.json
 ```
 
-Three apps because each one ships under its own subdomain and has its own deploy. Three
-packages because they have three different consumers: the apps consume `@whichly/ui`, the
-client site loads `@whichly/runtime` from the CDN, and the client codebase imports `@whichly/react`
-from npm.
+## Development
 
-## Requirements
-
-- **Node 24** (see `.nvmrc` — `nvm use` if you have nvm). Portless needs 24+.
-- **pnpm 9** (Corepack will pin this for you via the `packageManager` field in `package.json`).
-- First `pnpm dev` will prompt for your sudo password — Portless needs it once to bind port
-  443 and trust the local CA it generates. Subsequent runs are passwordless.
-
-## Getting started
+Requires **Node 24** (see `.nvmrc`) and **pnpm 9** (pinned via `packageManager` in
+`package.json`).
 
 ```bash
-nvm use          # picks Node 24
-pnpm install     # installs everything, portless included
-pnpm dev         # starts all 3 apps under https://*.whichly.localhost
-                 # → first run will ask for your sudo password
+pnpm install     # install everything
+pnpm dev         # run all workspaces in parallel
 ```
 
-Local URLs:
-- `web`       → https://whichly.localhost
-- `dashboard` → https://app.whichly.localhost
-- `docs`      → https://docs.whichly.localhost
+`pnpm dev` also works per workspace, e.g. `pnpm --filter @whichly/react dev` or
+`pnpm --filter @whichly/web dev`.
 
-Underneath, Portless runs each app on its own loopback port (3000/3001/3002 from
-`portless.json#apps.*.appPort`) and reverse-proxies HTTPS to it. If you want to bypass the
-proxy for a quick sanity check, `pnpm --filter @whichly/web dev` still works — it'll just
-listen on plain `http://localhost:3000`.
-
-The package filters also work for `build`, `typecheck`, and `lint`.
-
-## Building
+### Building
 
 ```bash
 pnpm build              # packages first, then apps
@@ -72,60 +176,24 @@ pnpm build:packages     # just packages/*
 pnpm build:apps         # just apps/*
 ```
 
-Each package builds to its own `dist/`:
-- `packages/runtime/dist/whichly.js` — single-file IIFE, exposes `window.Whichly`. This is what
-  Coolify Nginx serves at `cdn.whichly.dev/whichly.js`.
-- `packages/react/dist/` — ESM + CJS + `.d.ts`. This is what gets published to npm as
-  `@whichly/react`.
-- `packages/ui/` doesn't build — it ships `.tsx` source through `package.json#exports` and
-  apps transpile it via `transpilePackages: ["@whichly/ui"]`.
+`packages/react` builds to `dist/` (ESM + CJS + `.d.ts`) and is what gets published to npm.
 
-## Checks
+### Checks
 
 ```bash
-pnpm typecheck    # runs tsc --noEmit in every workspace
+pnpm typecheck    # tsc --noEmit in every workspace
 pnpm lint         # biome check .
 pnpm format       # biome format --write .
 ```
 
-Biome is the only lint/format tool. No ESLint, no Prettier.
+Biome is the only lint/format tool — no ESLint, no Prettier.
 
-## Adding a shadcn component
-
-shadcn is wired up the way their docs recommend for monorepos: the registry lives in
-`packages/ui`, and each app has its own `components.json` that points the aliases at
-`@whichly/ui/*`. So when you run `shadcn add` from inside an app, the component lands in
-`packages/ui/src/components/` and is immediately importable from every app.
-
-```bash
-cd apps/dashboard
-pnpm dlx shadcn@latest add button
-# → packages/ui/src/components/button.tsx
-```
-
-Then in code:
-
-```tsx
-import { Button } from "@whichly/ui/components/button";
-```
-
-Theme tokens (colors, radius, dark mode) live in `packages/ui/src/styles/globals.css`. Each
-app imports them via `@import "@whichly/ui/globals.css"` from its own `app/globals.css`.
-
-## Adding docs pages
+### Adding docs pages
 
 MDX files go in `apps/docs/content/docs/`. The `meta.json` next to them controls the sidebar
-order. Restart `pnpm --filter @whichly/docs dev` if you add a new file and it doesn't show up
-(the MDX runtime regenerates `.source/` on boot).
+order. Restart `pnpm --filter @whichly/docs dev` if a new file doesn't show up (the MDX runtime
+regenerates `.source/` on boot).
 
-## Working on the runtime bundle
+## License
 
-`packages/runtime` builds with Vite in lib mode and emits a single IIFE file. To iterate:
-
-```bash
-pnpm --filter @whichly/runtime dev     # vite build --watch
-```
-
-The bundle is intentionally tiny (Preact + Shadow DOM, no React). The entry exposes
-`window.Whichly.mount(el, { token })` and that's the contract clients use in their
-`<script src="https://cdn.whichly.dev/whichly.js">` tag
+MIT © kapishdima
