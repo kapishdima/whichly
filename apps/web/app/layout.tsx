@@ -17,9 +17,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={cn("dark font-sans", inter.variable)}>
+    <html lang="en" className={cn("dark scheme-only-dark antialiased font-sans", inter.variable)}>
       <body>
-        <WhichlyProvider>
+        <WhichlyProvider floating={false}>
           <SiteHeader />
           {children}
           <SiteFooter />

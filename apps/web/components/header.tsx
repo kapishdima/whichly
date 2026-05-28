@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
 import { Github, Menu, Twitter, X } from "lucide-react";
 import Link from "next/link";
@@ -10,9 +11,6 @@ const menuItems = [
   { name: "How it works", href: "#how-it-works" },
   { name: "FAQ", href: "#faq" },
 ];
-
-const GITHUB_URL = "https://github.com/kapishdima/whichly";
-const TWITTER_URL = "https://twitter.com/whichly";
 
 export const SiteHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
@@ -36,9 +34,12 @@ export const SiteHeader = () => {
         <div className="mx-auto max-w-5xl px-6">
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-4 lg:gap-0 lg:py-3">
             <div className="flex w-full justify-between gap-6 lg:w-auto">
-              <Link href="/" aria-label="Whichly home" className="flex items-center gap-2">
-                <span className="size-6 rounded-md bg-gradient-to-br from-sky-400 to-violet-500" />
-                <span className="text-lg font-semibold tracking-tight">Whichly</span>
+              <Link
+                href="/"
+                aria-label="Homepage"
+                className="flex items-center text-lg font-semibold tracking-tight"
+              >
+                Whichly
               </Link>
 
               <button
@@ -52,7 +53,7 @@ export const SiteHeader = () => {
               </button>
 
               <div className="m-auto hidden size-fit lg:block">
-                <ul className="flex gap-1">
+                <ul className="flex gap-1" role="list">
                   {menuItems.map((item) => (
                     <li key={item.href}>
                       <Button
@@ -69,9 +70,9 @@ export const SiteHeader = () => {
               </div>
             </div>
 
-            <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border border-white/10 p-6 shadow-2xl shadow-black/40 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-2 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none">
+            <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border border-white/10 p-6 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-2 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0">
               <div className="lg:hidden">
-                <ul className="space-y-6 text-base">
+                <ul className="space-y-6 text-base" role="list">
                   {menuItems.map((item) => (
                     <li key={item.href}>
                       <Link
@@ -89,24 +90,34 @@ export const SiteHeader = () => {
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="relative"
                   aria-label="Whichly on Twitter"
-                  render={<Link href={TWITTER_URL} target="_blank" rel="noreferrer" />}
+                  render={<Link href={siteConfig.links.twitter} target="_blank" rel="noreferrer" />}
                   nativeButton={false}
                 >
                   <Twitter />
+                  <span
+                    className="absolute top-1/2 left-1/2 size-[max(100%,3rem)] -translate-1/2 pointer-fine:hidden"
+                    aria-hidden="true"
+                  />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="relative"
                   aria-label="Whichly on GitHub"
-                  render={<Link href={GITHUB_URL} target="_blank" rel="noreferrer" />}
+                  render={<Link href={siteConfig.links.github} target="_blank" rel="noreferrer" />}
                   nativeButton={false}
                 >
                   <Github />
+                  <span
+                    className="absolute top-1/2 left-1/2 size-[max(100%,3rem)] -translate-1/2 pointer-fine:hidden"
+                    aria-hidden="true"
+                  />
                 </Button>
                 <Button
                   size="sm"
-                  render={<Link href={GITHUB_URL} target="_blank" rel="noreferrer" />}
+                  render={<Link href={siteConfig.links.github} target="_blank" rel="noreferrer" />}
                   nativeButton={false}
                 >
                   <span>Get started</span>

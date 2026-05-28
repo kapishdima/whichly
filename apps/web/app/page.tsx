@@ -4,7 +4,7 @@ import { HowItWorksSection } from "@/components/sections/how-it-works";
 
 export default function HomePage() {
   return (
-    <main>
+    <main className="isolate">
       <HeroSection />
       <HowItWorksSection />
       <FaqSection />

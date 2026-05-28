@@ -35,8 +35,31 @@ export function useWhichly(): WhichlyContextValue {
   return ctx;
 }
 
+interface WhichlyPickerContextValue {
+  blocks: Map<string, string[]>;
+  state: State;
+  select(block: string, variant: string): void;
+  reset(block: string): void;
+}
+
+const PickerContext = createContext<WhichlyPickerContextValue | null>(null);
+
+export function useWhichlyPicker(): WhichlyPickerContextValue {
+  const ctx = useContext(PickerContext);
+  if (!ctx) {
+    throw new Error("<WhichlyPicker> must be rendered inside <WhichlyProvider>");
+  }
+  return ctx;
+}
+
 export interface WhichlyProviderProps {
   initialState?: State;
+  /**
+   * Render the built-in floating dock pinned to the bottom of the viewport.
+   * Set to `false` to place the picker yourself with `<WhichlyPicker>`.
+   * @default true
+   */
+  floating?: boolean;
   children?: ReactNode;
 }
 
@@ -60,7 +83,7 @@ function flattenRegistry(reg: Registry): Map<string, string[]> {
   return out;
 }
 
-export function WhichlyProvider({ initialState, children }: WhichlyProviderProps) {
+export function WhichlyProvider({ initialState, floating = true, children }: WhichlyProviderProps) {
   const [registry, setRegistry] = useState<Registry>(() => new Map());
   const [state, setState] = useState<State>(() => initialState ?? {});
   const [mount, setMount] = useState<ShadowMount | null>(null);
@@ -73,6 +96,7 @@ export function WhichlyProvider({ initialState, children }: WhichlyProviderProps
   }, []);
 
   useEffect(() => {
+    if (!floating) return;
     const host = document.createElement("div");
     host.id = "__whichly_picker_host";
     host.style.cssText = [
@@ -101,7 +125,7 @@ export function WhichlyProvider({ initialState, children }: WhichlyProviderProps
       host.remove();
       setMount(null);
     };
-  }, []);
+  }, [floating]);
 
   const register = useCallback((block: string, instanceId: InstanceId, variants: string[]) => {
     setRegistry((prev) => {
@@ -177,21 +201,29 @@ export function WhichlyProvider({ initialState, children }: WhichlyProviderProps
     [register, unregister, getActive],
   );
 
+  const pickerContextValue = useMemo<WhichlyPickerContextValue>(
+    () => ({ blocks: sortedBlocks, state: pickerState, select, reset }),
+    [sortedBlocks, pickerState, select, reset],
+  );
+
   return (
     <WhichlyContext.Provider value={contextValue}>
-      {children}
-      {mount &&
-        createPortal(
-          <ShadowRootContext.Provider value={mount.shadow}>
-            <Picker
-              blocks={sortedBlocks}
-              state={pickerState}
-              onSelect={select}
-              onReset={reset}
-            />
-          </ShadowRootContext.Provider>,
-          mount.portalEl,
-        )}
+      <PickerContext.Provider value={pickerContextValue}>
+        {children}
+        {floating &&
+          mount &&
+          createPortal(
+            <ShadowRootContext.Provider value={mount.shadow}>
+              <Picker
+                blocks={sortedBlocks}
+                state={pickerState}
+                onSelect={select}
+                onReset={reset}
+              />
+            </ShadowRootContext.Provider>,
+            mount.portalEl,
+          )}
+      </PickerContext.Provider>
     </WhichlyContext.Provider>
   );
 }

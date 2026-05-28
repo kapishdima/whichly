@@ -1,5 +1,11 @@
 # @whichly/react
 
+## 1.0.0
+
+### Major Changes
+
+- refactor picker ui
+
 ## 0.1.1
 
 ### Patch Changes

@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight, Minimize2, RotateCcw } from "lucide-react";
 import { useState } from "react";
+import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { Pipette } from "./ui/icons/pipette";
 
@@ -10,6 +11,8 @@ export interface PickerProps {
   state: Record<string, string>;
   onSelect: (block: string, variant: string) => void;
   onReset: (block: string) => void;
+  /** Render inline in normal flow instead of as a fixed floating dock. */
+  anchored?: boolean;
 }
 
 function wrap(list: string[], current: string, dir: 1 | -1): string {
@@ -73,12 +76,12 @@ function Stepper({ block, variants, current, onSelect, onReset }: StepperProps) 
   );
 }
 
-export function Picker({ blocks, state, onSelect, onReset }: PickerProps) {
+export function Picker({ blocks, state, onSelect, onReset, anchored = false }: PickerProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   if (blocks.size === 0) return null;
 
-  if (collapsed) {
+  if (!anchored && collapsed) {
     return (
       <Button
         variant="secondary"
@@ -93,15 +96,23 @@ export function Picker({ blocks, state, onSelect, onReset }: PickerProps) {
   }
 
   return (
-    <div className="fixed inset-x-0 bottom-[5vh] z-9999 flex justify-center px-4 pointer-events-none max-sm:bottom-[max(12px,env(safe-area-inset-bottom))] max-sm:px-2">
+    <div
+      className={cn(
+        anchored
+          ? "flex"
+          : "fixed inset-x-0 bottom-[5vh] z-9999 flex justify-center px-4 pointer-events-none max-sm:bottom-[max(12px,env(safe-area-inset-bottom))] max-sm:px-2",
+      )}
+    >
       <div
         role="toolbar"
         aria-label="Whichly variant picker"
-        className="whichly-dock-anim pointer-events-auto flex min-w-0 max-w-full items-center gap-3.5 rounded-full bg-card px-3 py-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.45)] ring-1 ring-white/10 sm:min-w-160 max-sm:gap-2 max-sm:p-2"
+        className={cn(
+          "flex min-w-0 max-w-full items-center gap-3.5 rounded-full bg-card px-2 pl-4 py-1 shadow-[0_16px_48px_rgba(0,0,0,0.45)] ring-1 ring-white/10 max-sm:gap-2 max-sm:p-2",
+          anchored ? "pointer-events-auto" : "whichly-dock-anim pointer-events-auto sm:min-w-160",
+        )}
       >
         <div className="inline-flex shrink-0 items-center gap-2.5 pl-0.5 max-sm:gap-0 max-sm:pl-0">
-          <Pipette className="size-6 shrink-0 text-foreground" />
-          <div className="text-sm font-semibold text-foreground max-sm:hidden">whichly</div>
+          <div className="text-sm font-semibold text-foreground max-sm:hidden">Whichly</div>
         </div>
         <div className="scrollbar-none flex items-center gap-2.5 flex-1 min-w-0 overflow-x-auto py-0.5">
           {Array.from(blocks).map(([block, variants]) => (
@@ -115,15 +126,17 @@ export function Picker({ blocks, state, onSelect, onReset }: PickerProps) {
             />
           ))}
         </div>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Minimize picker"
-          className="shrink-0"
-          onClick={() => setCollapsed(true)}
-        >
-          <Minimize2 className="size-4" />
-        </Button>
+        {!anchored && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label="Minimize picker"
+            className="shrink-0"
+            onClick={() => setCollapsed(true)}
+          >
+            <Minimize2 className="size-4" />
+          </Button>
+        )}
       </div>
     </div>
   );
