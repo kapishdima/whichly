@@ -91,6 +91,7 @@ export function OptioProvider({ initialState, children }: OptioProviderProps) {
     shadow.appendChild(styleEl);
 
     const portalEl = document.createElement("div");
+    portalEl.className = "dark";
     shadow.appendChild(portalEl);
 
     document.body.appendChild(host);
