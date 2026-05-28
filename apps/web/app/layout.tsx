@@ -1,3 +1,4 @@
+import { OpenPanelComponent } from "@openpanel/nextjs";
 import { WhichlyProvider } from "@whichly/react";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -49,6 +50,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {children}
           <SiteFooter />
         </WhichlyProvider>
+        <OpenPanelComponent
+          clientId={process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID as string}
+          apiUrl="/api/op"
+          scriptUrl="/api/op/op1.js"
+          trackScreenViews
+          trackAttributes
+          trackOutgoingLinks
+        />
       </body>
     </html>
   );

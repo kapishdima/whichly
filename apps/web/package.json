@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
+    "@openpanel/nextjs": "^1.5.1",
     "@rexa-developer/tiks": "^0.2.0",
     "@whichly/react": "workspace:*",
     "class-variance-authority": "^0.7.1",
