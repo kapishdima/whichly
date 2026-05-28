@@ -1,0 +1,48 @@
+---
+title: Installation
+description: Add @whichly/react to your React or Next.js project.
+---
+
+Install the package with your package manager of choice:
+
+```bash
+# pnpm
+pnpm add @whichly/react
+
+# npm
+npm install @whichly/react
+
+# yarn
+yarn add @whichly/react
+```
+
+## Peer dependencies
+
+Whichly works with **React 18 and 19**. Make sure your project already has them installed:
+
+```json
+{
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  }
+}
+```
+
+## No CSS import required
+
+The picker UI ships its styles **inlined and scoped to a shadow DOM**, so there is nothing to
+import and nothing to configure in your Tailwind or global CSS. The picker's styles can't leak
+onto your page, and your page's styles can't leak into the picker.
+
+```tsx
+// This is all you need — no `import "@whichly/react/styles.css"`.
+import { WhichlyProvider, Block, Variant } from "@whichly/react";
+```
+
+## TypeScript
+
+The package ships its own type declarations, so no `@types/*` package is needed. Every export
+is fully typed (`WhichlyProviderProps`, `BlockProps`, `VariantProps`, `WhichlyPickerProps`).
+
+Next, head to the [Quick start](/docs/quick-start).

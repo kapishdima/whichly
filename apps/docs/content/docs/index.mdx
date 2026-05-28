@@ -1,0 +1,55 @@
+---
+title: Introduction
+description: A floating variant picker for React that lets clients toggle block variants live on a real page.
+---
+
+**Whichly** is an open-source React library that mounts a floating "variant picker" on your
+page. You wrap sections of your UI in `<Block>` / `<Variant>`, deploy to a staging URL, and
+share the link. Whoever opens it can toggle between variants live — on the real page, in the
+real layout, with the real data.
+
+There is **no backend, no dashboard, and no auth**. The selected variants are encoded in the
+URL (`?vp=block:variant,...`), so a chosen combination is just a shareable link.
+
+## Why Whichly?
+
+Picking between design or copy variants usually means screenshots, Figma frames, or shipping
+separate preview deploys. Whichly keeps everything on one page:
+
+- **Real context.** Variants render inside your actual page, not a mockup.
+- **Shareable by URL.** Send a link that opens with a specific combination pre-selected.
+- **Zero infrastructure.** It's a single npm package — drop it in, wrap a few blocks, done.
+- **Style-isolated UI.** The picker renders inside a shadow DOM, so its styles never collide
+  with your page (and your page never leaks into it).
+
+## How it works at a glance
+
+```tsx
+import { WhichlyProvider, Block, Variant } from "@whichly/react";
+
+export default function Page() {
+  return (
+    <WhichlyProvider>
+      <Block name="Hero">
+        <Variant name="Bold">
+          <h1>Ship faster.</h1>
+        </Variant>
+        <Variant name="Friendly">
+          <h1>Let's build something great together.</h1>
+        </Variant>
+      </Block>
+    </WhichlyProvider>
+  );
+}
+```
+
+A floating dock appears at the bottom of the page with a stepper for the `Hero` block. Toggle
+it and the heading swaps instantly; the URL updates to `?vp=Hero:Friendly` so the choice is
+shareable.
+
+<Cards>
+  <Card title="Installation" href="/docs/installation" />
+  <Card title="Quick start" href="/docs/quick-start" />
+  <Card title="Core concepts" href="/docs/concepts" />
+  <Card title="API reference" href="/docs/api/whichly-provider" />
+</Cards>

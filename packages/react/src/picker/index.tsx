@@ -108,7 +108,7 @@ export function Picker({ blocks, state, onSelect, onReset, anchored = false }: P
         aria-label="Whichly variant picker"
         className={cn(
           "flex min-w-0 max-w-full items-center gap-3.5 rounded-full bg-card px-2 pl-4 py-1 shadow-[0_16px_48px_rgba(0,0,0,0.45)] ring-1 ring-white/10 max-sm:gap-2 max-sm:p-2",
-          anchored ? "pointer-events-auto" : "whichly-dock-anim pointer-events-auto sm:min-w-160",
+          anchored ? "pointer-events-auto" : "whichly-dock-anim pointer-events-auto ",
         )}
       >
         <div className="inline-flex shrink-0 items-center gap-2.5 pl-0.5 max-sm:gap-0 max-sm:pl-0">

@@ -1,0 +1,69 @@
+---
+title: WhichlyPicker
+description: Render the variant picker inline, instead of the built-in floating dock.
+---
+
+`WhichlyPicker` lets you place the picker UI yourself rather than using the provider's built-in
+floating dock. Use it together with [`<WhichlyProvider floating={false}>`](/docs/api/whichly-provider#floating).
+
+```tsx
+import { WhichlyProvider, WhichlyPicker, Block, Variant } from "@whichly/react";
+
+<WhichlyProvider floating={false}>
+  <header>
+    <WhichlyPicker />
+  </header>
+
+  <Block name="Hero">
+    <Variant name="Bold">{/* ... */}</Variant>
+    <Variant name="Friendly">{/* ... */}</Variant>
+  </Block>
+</WhichlyProvider>;
+```
+
+## Props
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | No | Class name(s) applied to the picker's container element. |
+
+## Behavior
+
+- It mounts its own shadow root, so its styles stay isolated just like the floating dock.
+- It reads the block/variant registry and current selection from the
+  [`WhichlyProvider`](/docs/api/whichly-provider), so it must be rendered inside a provider.
+
+## Placement
+
+Render `WhichlyPicker` **outside** your [`<Block>`](/docs/api/block) components. A block only
+renders its active variant's subtree, so a picker placed inside a block could be unmounted when
+the variant switches. Keeping it outside ensures it stays mounted across selections.
+
+```tsx
+// ✅ Good — picker stays mounted
+<WhichlyProvider floating={false}>
+  <WhichlyPicker />
+  <Block name="Hero">{/* ... */}</Block>
+</WhichlyProvider>
+
+// ⚠️ Avoid — picker lives inside a block
+<WhichlyProvider floating={false}>
+  <Block name="Hero">
+    <Variant name="Bold">
+      <WhichlyPicker />
+    </Variant>
+  </Block>
+</WhichlyProvider>
+```
+
+## The `Whichly.Picker` alias
+
+`WhichlyPicker` is also exposed as `Whichly.Picker`:
+
+```tsx
+import { Whichly } from "@whichly/react";
+
+<Whichly.Picker />;
+```
+
+Note the alias only works from client components — see [React Server Components](/docs/rsc).

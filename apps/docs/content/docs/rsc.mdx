@@ -1,0 +1,66 @@
+---
+title: React Server Components
+description: Using Whichly with the Next.js App Router and server components.
+---
+
+Whichly works with the Next.js App Router and React Server Components (RSC). A few details are
+worth knowing so you wire it up correctly.
+
+## What is a client component
+
+`WhichlyProvider`, `Block`, and `Variant` are marked `"use client"`. They rely on React context,
+state, and effects (to sync the URL and mount the picker), which only run on the client.
+
+This does **not** mean your whole app has to be client-rendered. The `"use client"` boundary is
+about where these specific components run — the content you place _inside_ a `<Variant>` can
+still be server-rendered.
+
+## Server components can use Block and Variant
+
+You can import `Block` and `Variant` directly into a server component and pass server-rendered
+children to them:
+
+```tsx title="app/page.tsx (Server Component)"
+import { Block, Variant } from "@whichly/react";
+import { WhichlyProvider } from "@whichly/react";
+import { ServerHero } from "@/components/server-hero";
+
+export default function Page() {
+  return (
+    <WhichlyProvider>
+      <Block name="Hero">
+        <Variant name="A">
+          {/* ServerHero is a Server Component — rendered on the server */}
+          <ServerHero variant="a" />
+        </Variant>
+        <Variant name="B">
+          <ServerHero variant="b" />
+        </Variant>
+      </Block>
+    </WhichlyProvider>
+  );
+}
+```
+
+The client components (`Block`/`Variant`) accept already-rendered server children as
+`children` — a standard RSC pattern.
+
+## Caveat: the `Whichly` namespace object
+
+The package also exports a namespaced object for convenience:
+
+```tsx
+import { Whichly } from "@whichly/react";
+
+<Whichly.Block name="Hero">
+  <Whichly.Variant name="A">{/* ... */}</Whichly.Variant>
+</Whichly.Block>;
+```
+
+`Whichly.Block`, `Whichly.Variant`, and `Whichly.Picker` only work **from client components**.
+Next.js client references don't expose properties on the boundary, so accessing
+`Whichly.Block` from a _server_ component won't work. From a server component, use the **named
+imports** (`Block`, `Variant`) instead — they behave identically.
+
+> Note: `Whichly` does not include the provider. Always import `WhichlyProvider` as a named
+> export.

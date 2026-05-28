@@ -1,0 +1,111 @@
+---
+title: Quick start
+description: Wrap your app in a provider, define a block with variants, and toggle them live.
+---
+
+There are three pieces to Whichly:
+
+1. **`WhichlyProvider`** — wraps your app, holds the variant state, and renders the picker.
+2. **`Block`** — a named group of mutually-exclusive variants.
+3. **`Variant`** — one option inside a block.
+
+## 1. Wrap your app in the provider
+
+Place `WhichlyProvider` near the root of your app (or around the part of the page that contains
+your blocks).
+
+```tsx title="app/page.tsx"
+import { WhichlyProvider } from "@whichly/react";
+
+export default function Page() {
+  return (
+    <WhichlyProvider>
+      {/* your page */}
+    </WhichlyProvider>
+  );
+}
+```
+
+## 2. Wrap a section in a Block with Variants
+
+Inside the provider, wrap any section you want to make switchable in a `<Block>` and give it a
+unique `name`. Each `<Variant>` inside it is one option.
+
+```tsx
+import { WhichlyProvider, Block, Variant } from "@whichly/react";
+
+export default function Page() {
+  return (
+    <WhichlyProvider>
+      <Block name="Hero">
+        <Variant name="Bold">
+          <h1>Ship faster.</h1>
+          <p>The fastest way to validate copy with your client.</p>
+        </Variant>
+
+        <Variant name="Friendly">
+          <h1>Let's build something great together.</h1>
+          <p>Friendly, approachable, human.</p>
+        </Variant>
+      </Block>
+    </WhichlyProvider>
+  );
+}
+```
+
+The **first variant is active by default**. A floating dock appears at the bottom of the page
+with a stepper for the `Hero` block — use the arrows to cycle through `Bold` and `Friendly`.
+
+## 3. Share the link
+
+As you switch variants, Whichly writes your selection into the URL:
+
+```
+https://staging.example.com/?vp=Hero:Friendly
+```
+
+Copy that link and send it to your client. When they open it, the page loads with the
+`Friendly` hero already selected. See [Shareable URLs](/docs/url-state) for the full format.
+
+## Multiple blocks
+
+Add as many blocks as you like. Each gets its own stepper in the picker and its own segment in
+the URL.
+
+```tsx
+<WhichlyProvider>
+  <Block name="Hero">
+    <Variant name="Bold">{/* ... */}</Variant>
+    <Variant name="Friendly">{/* ... */}</Variant>
+  </Block>
+
+  <Block name="CTA">
+    <Variant name="Primary">
+      <button>Get started</button>
+    </Variant>
+    <Variant name="Subtle">
+      <a href="/signup">Sign up →</a>
+    </Variant>
+  </Block>
+</WhichlyProvider>
+```
+
+This produces URLs like `?vp=Hero:Friendly,CTA:Subtle`.
+
+## Placing the picker yourself
+
+By default the provider renders a **floating dock** pinned to the bottom of the viewport. If you
+want the picker somewhere specific in your layout instead, set `floating={false}` and drop a
+[`<WhichlyPicker>`](/docs/api/whichly-picker) wherever you want it:
+
+```tsx
+import { WhichlyProvider, WhichlyPicker, Block, Variant } from "@whichly/react";
+
+<WhichlyProvider floating={false}>
+  <header>
+    <WhichlyPicker />
+  </header>
+
+  <Block name="Hero">{/* ... */}</Block>
+</WhichlyProvider>
+```

@@ -1,0 +1,50 @@
+---
+title: FAQ
+description: Common questions about how Whichly behaves.
+---
+
+### Does Whichly ship to production?
+
+Whichly is a normal dependency, so it's included in your bundle wherever you import it. It's
+designed for **staging / client-review** pages. If you don't want the picker on production,
+conditionally render `WhichlyProvider` (e.g. behind an environment check) or simply don't wrap
+your production tree with it.
+
+### Do I need to import any CSS?
+
+No. The picker's styles are inlined and scoped to a shadow DOM. There is no stylesheet to import
+and nothing to add to your Tailwind config. See [Installation](/docs/installation).
+
+### Will the picker's styles clash with my site?
+
+No. The picker is rendered into a shadow root, which isolates styles in both directions — the
+picker can't affect your page and your page can't affect the picker. See
+[Core concepts](/docs/concepts#shadow-dom-isolated-picker).
+
+### How many variants can a block have?
+
+As many as you want. The picker shows a stepper that cycles through all variants in the block,
+plus a reset control that returns to the first (default) variant.
+
+### Can two blocks share the same name?
+
+Yes. Each `<Block>` instance is tracked independently (internally keyed with `useId`), so reusing
+a name across multiple block instances is supported.
+
+### What happens to inactive variants?
+
+They stay mounted in the React tree but are hidden with `display: none`. Switching is instant
+because nothing remounts. The active variant uses `display: contents` so it adds no extra layout
+box. See [Render-all, hide with CSS](/docs/concepts#render-all-hide-with-css).
+
+### Is there a backend or dashboard?
+
+No. Whichly is a single React package. All state lives in the URL (`?vp=...`), so sharing a
+selection is just sharing a link. There's no database, no auth, and no service to run.
+
+### Named imports vs the `Whichly` object — which should I use?
+
+They're equivalent. `import { Block, Variant } from "@whichly/react"` is the same as
+`Whichly.Block` / `Whichly.Variant`. The one difference: the `Whichly.*` object only works from
+**client** components, while the named imports work from server components too. See
+[React Server Components](/docs/rsc).

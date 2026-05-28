@@ -1,0 +1,46 @@
+---
+title: Variant
+description: One option inside a block.
+---
+
+`Variant` represents a single option within a [`<Block>`](/docs/api/block). Exactly one variant
+per block is active at a time; the rest are hidden.
+
+```tsx
+import { Block, Variant } from "@whichly/react";
+
+<Block name="Hero">
+  <Variant name="Bold">
+    <h1>Ship faster.</h1>
+  </Variant>
+  <Variant name="Friendly">
+    <h1>Let's build something great together.</h1>
+  </Variant>
+</Block>;
+```
+
+## Props
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | Yes | The variant's identifier within its block. Used in the `?vp=` URL and shown in the picker. |
+| `children` | `ReactNode` | Yes | The content rendered when this variant is active. |
+
+## Behavior
+
+- A variant reads from its parent block to know whether it's the active one.
+- **Active** variant: wrapped with `display: contents`, so the wrapper adds no layout box — the
+  children participate directly in the surrounding flex/grid layout.
+- **Inactive** variant: wrapped with `display: none`. It stays mounted in the tree (nothing
+  remounts when switching), it's just hidden.
+- Each rendered variant carries `data-vp-block` and `data-vp-variant` attributes for debugging or
+  targeting in styles/tests.
+
+## Notes
+
+- A `<Variant>` must be a child of a [`<Block>`](/docs/api/block).
+- Because inactive variants stay mounted, their effects and data hooks still run. Keep that in
+  mind for expensive variant trees.
+
+> `Variant` is a client component (`"use client"`) that accepts server-rendered children. See
+> [React Server Components](/docs/rsc).

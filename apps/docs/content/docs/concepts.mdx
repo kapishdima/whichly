@@ -1,0 +1,59 @@
+---
+title: Core concepts
+description: How Whichly renders variants, encodes state in the URL, and isolates the picker.
+---
+
+Whichly is built on three ideas. Understanding them explains both what it does well and where
+its constraints come from.
+
+## Render-all, hide with CSS
+
+Every `<Variant>` you declare is always present in the React tree. Whichly doesn't unmount the
+inactive ones — it hides them with CSS:
+
+- The **active** variant gets `display: contents`, so its wrapper adds no layout box. The
+  variant's children participate directly in the parent's flex/grid layout, exactly as if the
+  `<Variant>` wrapper weren't there.
+- The **inactive** variants get `display: none`.
+
+Each rendered variant also carries `data-vp-block` and `data-vp-variant` attributes, which is
+handy for debugging or targeting a specific variant in styles or tests.
+
+Because all variants render, switching between them is instant — there's no remount, no data
+refetch, no layout jump. The trade-off is that every variant's component tree runs (effects,
+data hooks, etc.), so keep that in mind for expensive variants.
+
+## URL-encoded, shareable state
+
+The current selection lives entirely in the URL query string under the `vp` parameter:
+
+```
+?vp=Hero:Friendly,CTA:Subtle
+```
+
+When the provider mounts it parses this parameter to restore the selection. Each time someone
+changes a variant, Whichly writes the new state back to the URL. That means **a chosen
+combination is just a link** — no database, no session, no server round-trip. Copy the URL and
+the recipient sees exactly what you saw.
+
+See [Shareable URLs](/docs/url-state) for the exact format.
+
+## Shadow-DOM-isolated picker
+
+The picker UI is mounted through a React portal into a **shadow root** appended to
+`document.body`. Its styles (Tailwind + a small vendored component set) are compiled to a CSS
+string and injected into that shadow root.
+
+This gives complete two-way isolation:
+
+- The picker's CSS **cannot leak** onto your page.
+- Your page's CSS **cannot leak** into the picker.
+
+It's why there's no stylesheet for you to import and no risk of class-name collisions, no matter
+what CSS framework your host page uses.
+
+## One package, one tree
+
+There's no CDN script and no separate runtime to load. `WhichlyProvider`, `Block`, `Variant`,
+and `WhichlyPicker` are all part of the same React tree in your app. The only thing that escapes
+the tree is the picker portal into the shadow root — and that's mounted for you automatically.

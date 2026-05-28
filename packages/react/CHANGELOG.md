@@ -1,5 +1,11 @@
 # @whichly/react
 
+## 2.0.0
+
+### Major Changes
+
+- fixed picker width
+
 ## 1.0.0
 
 ### Major Changes

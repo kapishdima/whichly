@@ -1,0 +1,60 @@
+---
+title: WhichlyProvider
+description: The root provider that holds variant state, syncs the URL, and renders the picker.
+---
+
+`WhichlyProvider` is the root of Whichly. It manages the active variant for every block, parses
+and writes the `?vp=...` URL state, and mounts the picker. Wrap it around the part of your app
+that contains your blocks.
+
+```tsx
+import { WhichlyProvider } from "@whichly/react";
+
+<WhichlyProvider>{/* blocks go here */}</WhichlyProvider>;
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `initialState` | `Record<string, string>` | `{}` | Initial variant selection, mapping block name → variant name. The URL's `?vp=` parameter takes precedence when present. |
+| `floating` | `boolean` | `true` | When `true`, renders the built-in floating dock pinned to the bottom of the viewport. Set to `false` to place the picker yourself with [`<WhichlyPicker>`](/docs/api/whichly-picker). |
+| `children` | `ReactNode` | — | Your app / page content, including any [`<Block>`](/docs/api/block) components. |
+
+## `floating`
+
+The default (`floating={true}`) renders a dock at the bottom-center of the screen automatically —
+you don't render anything yourself.
+
+```tsx
+// Built-in floating dock (default)
+<WhichlyProvider>
+  <Block name="Hero">{/* ... */}</Block>
+</WhichlyProvider>
+```
+
+Set `floating={false}` when you want to control where the picker lives. Then render a
+[`<WhichlyPicker>`](/docs/api/whichly-picker) anywhere inside the provider (but outside your
+blocks):
+
+```tsx
+<WhichlyProvider floating={false}>
+  <WhichlyPicker />
+  <Block name="Hero">{/* ... */}</Block>
+</WhichlyProvider>
+```
+
+## `initialState`
+
+Seed the starting selection from code instead of relying on a URL:
+
+```tsx
+<WhichlyProvider initialState={{ Hero: "Friendly", CTA: "Subtle" }}>
+  {/* ... */}
+</WhichlyProvider>
+```
+
+If the current URL contains a `?vp=` parameter, that wins over `initialState`.
+
+> `WhichlyProvider` is a client component (`"use client"`). See
+> [React Server Components](/docs/rsc) for how it interacts with the App Router.

@@ -1,0 +1,53 @@
+---
+title: Shareable URLs
+description: The ?vp= URL format Whichly uses to encode and share variant selections.
+---
+
+Whichly stores the active variant for every block in a single URL query parameter named `vp`.
+This is what makes a selection shareable — the link _is_ the state.
+
+## Format
+
+```
+?vp=block:variant,block:variant,...
+```
+
+- Each block/variant pair is written as `blockName:variantName`.
+- Multiple pairs are separated by commas.
+- Only blocks whose selection differs from their default need to appear — but Whichly will
+  generally write out the full current selection as you interact with the picker.
+
+### Examples
+
+| URL | Meaning |
+| --- | --- |
+| `?vp=Hero:Friendly` | The `Hero` block shows its `Friendly` variant. |
+| `?vp=Hero:Bold,CTA:Subtle` | `Hero` → `Bold`, `CTA` → `Subtle`. |
+| _(no `vp` param)_ | Every block shows its first (default) variant. |
+
+## How it's applied
+
+- **On load**, `WhichlyProvider` parses `?vp=...` from the current URL and restores the matching
+  variants. Anything not mentioned falls back to the block's first variant.
+- **On change**, selecting a variant in the picker updates the `vp` parameter in place using the
+  browser history, so the address bar always reflects the current view.
+
+## Pre-selecting variants without a URL
+
+If you'd rather seed the initial selection from code instead of the URL, pass `initialState` to
+the provider. The URL still takes precedence when it contains a `vp` parameter.
+
+```tsx
+<WhichlyProvider initialState={{ Hero: "Friendly", CTA: "Subtle" }}>
+  {/* ... */}
+</WhichlyProvider>
+```
+
+## Sharing a staging link
+
+A typical workflow:
+
+1. Deploy your app (with Whichly wrapped around your blocks) to a staging URL.
+2. Open the page and toggle the picker until it looks the way you want.
+3. Copy the URL from the address bar — it now contains your `?vp=...` selection.
+4. Send it to your client or teammate. They open it and see the exact combination.

@@ -1,0 +1,42 @@
+---
+title: Block
+description: A named group of mutually-exclusive variants.
+---
+
+`Block` groups a set of [`<Variant>`](/docs/api/variant) children and manages which one is
+active. Each block shows up as its own stepper in the picker and as its own segment in the
+`?vp=` URL.
+
+```tsx
+import { Block, Variant } from "@whichly/react";
+
+<Block name="Hero">
+  <Variant name="Bold">{/* ... */}</Variant>
+  <Variant name="Friendly">{/* ... */}</Variant>
+</Block>;
+```
+
+## Props
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | Yes | The block's identifier. Used as the block label in the picker and as the key in the `?vp=` URL. |
+| `children` | `ReactNode` | Yes | The block's [`<Variant>`](/docs/api/variant) components. |
+
+## Behavior
+
+- The block reads the active variant from the provider's state. If nothing is selected, it
+  **defaults to its first `<Variant>` child**.
+- It registers itself with the [`WhichlyProvider`](/docs/api/whichly-provider) on mount and
+  unregisters on unmount, so blocks can appear and disappear dynamically.
+- Reusing the same `name` across multiple `<Block>` instances is allowed — each instance is
+  tracked independently.
+
+## Notes
+
+- A `<Block>` must be rendered inside a [`WhichlyProvider`](/docs/api/whichly-provider).
+- Its direct meaningful children should be [`<Variant>`](/docs/api/variant) elements — that's how
+  the block discovers the set of available variants.
+
+> `Block` is a client component (`"use client"`), but it accepts server-rendered children. See
+> [React Server Components](/docs/rsc).
