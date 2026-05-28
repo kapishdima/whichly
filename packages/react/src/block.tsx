@@ -10,7 +10,7 @@ import {
   useId,
   useMemo,
 } from "react";
-import { useOptio } from "./provider";
+import { useWhichly } from "./provider";
 
 interface BlockContextValue {
   name: string;
@@ -22,7 +22,7 @@ const BlockContext = createContext<BlockContextValue | null>(null);
 export function useBlockContext(): BlockContextValue {
   const ctx = useContext(BlockContext);
   if (!ctx) {
-    throw new Error("<Optio.Variant> must be rendered inside <Optio.Block>");
+    throw new Error("<Whichly.Variant> must be rendered inside <Whichly.Block>");
   }
   return ctx;
 }
@@ -43,7 +43,7 @@ function extractVariantNames(children: ReactNode): string[] {
 }
 
 export function Block({ name, children }: BlockProps) {
-  const { register, unregister, getActive } = useOptio();
+  const { register, unregister, getActive } = useWhichly();
   const instanceId = useId();
 
   const variantNames = useMemo(() => extractVariantNames(children), [children]);

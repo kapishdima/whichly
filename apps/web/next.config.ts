@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const config: NextConfig = {
-  transpilePackages: ["@optio/react"],
+  transpilePackages: ["@whichly/react"],
 };
 
 export default config;

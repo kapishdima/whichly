@@ -83,7 +83,7 @@ export function Picker({ blocks, state, onSelect, onReset }: PickerProps) {
       <Button
         variant="secondary"
         size="icon-xl"
-        aria-label="Expand Optio picker"
+        aria-label="Expand Whichly picker"
         onClick={() => setCollapsed(false)}
         className="fixed bottom-[5vh] right-4 z-9999 rounded-full pointer-events-auto"
       >
@@ -96,12 +96,12 @@ export function Picker({ blocks, state, onSelect, onReset }: PickerProps) {
     <div className="fixed inset-x-0 bottom-[5vh] z-9999 flex justify-center px-4 pointer-events-none max-sm:bottom-[max(12px,env(safe-area-inset-bottom))] max-sm:px-2">
       <div
         role="toolbar"
-        aria-label="Optio variant picker"
-        className="optio-dock-anim pointer-events-auto flex min-w-0 max-w-full items-center gap-3.5 rounded-full bg-card px-3 py-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.45)] ring-1 ring-white/10 sm:min-w-160 max-sm:gap-2 max-sm:p-2"
+        aria-label="Whichly variant picker"
+        className="whichly-dock-anim pointer-events-auto flex min-w-0 max-w-full items-center gap-3.5 rounded-full bg-card px-3 py-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.45)] ring-1 ring-white/10 sm:min-w-160 max-sm:gap-2 max-sm:p-2"
       >
         <div className="inline-flex shrink-0 items-center gap-2.5 pl-0.5 max-sm:gap-0 max-sm:pl-0">
           <Pipette className="size-6 shrink-0 text-foreground" />
-          <div className="text-sm font-semibold text-foreground max-sm:hidden">optio</div>
+          <div className="text-sm font-semibold text-foreground max-sm:hidden">whichly</div>
         </div>
         <div className="scrollbar-none flex items-center gap-2.5 flex-1 min-w-0 overflow-x-auto py-0.5">
           {Array.from(blocks).map(([block, variants]) => (

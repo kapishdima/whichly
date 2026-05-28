@@ -19,23 +19,23 @@ import { parseUrl, type State, syncURL } from "./url";
 type InstanceId = string;
 type Registry = Map<string, Map<InstanceId, string[]>>;
 
-interface OptioContextValue {
+interface WhichlyContextValue {
   register(block: string, instanceId: InstanceId, variants: string[]): void;
   unregister(block: string, instanceId: InstanceId): void;
   getActive(block: string): string | undefined;
 }
 
-const OptioContext = createContext<OptioContextValue | null>(null);
+const WhichlyContext = createContext<WhichlyContextValue | null>(null);
 
-export function useOptio(): OptioContextValue {
-  const ctx = useContext(OptioContext);
+export function useWhichly(): WhichlyContextValue {
+  const ctx = useContext(WhichlyContext);
   if (!ctx) {
-    throw new Error("<Optio.Block> must be rendered inside <OptioProvider>");
+    throw new Error("<Whichly.Block> must be rendered inside <WhichlyProvider>");
   }
   return ctx;
 }
 
-export interface OptioProviderProps {
+export interface WhichlyProviderProps {
   initialState?: State;
   children?: ReactNode;
 }
@@ -60,7 +60,7 @@ function flattenRegistry(reg: Registry): Map<string, string[]> {
   return out;
 }
 
-export function OptioProvider({ initialState, children }: OptioProviderProps) {
+export function WhichlyProvider({ initialState, children }: WhichlyProviderProps) {
   const [registry, setRegistry] = useState<Registry>(() => new Map());
   const [state, setState] = useState<State>(() => initialState ?? {});
   const [mount, setMount] = useState<ShadowMount | null>(null);
@@ -74,7 +74,7 @@ export function OptioProvider({ initialState, children }: OptioProviderProps) {
 
   useEffect(() => {
     const host = document.createElement("div");
-    host.id = "__optio_picker_host";
+    host.id = "__whichly_picker_host";
     host.style.cssText = [
       "position:fixed",
       "left:0",
@@ -172,13 +172,13 @@ export function OptioProvider({ initialState, children }: OptioProviderProps) {
     return out;
   }, [sortedBlocks, state]);
 
-  const contextValue = useMemo<OptioContextValue>(
+  const contextValue = useMemo<WhichlyContextValue>(
     () => ({ register, unregister, getActive }),
     [register, unregister, getActive],
   );
 
   return (
-    <OptioContext.Provider value={contextValue}>
+    <WhichlyContext.Provider value={contextValue}>
       {children}
       {mount &&
         createPortal(
@@ -192,6 +192,6 @@ export function OptioProvider({ initialState, children }: OptioProviderProps) {
           </ShadowRootContext.Provider>,
           mount.portalEl,
         )}
-    </OptioContext.Provider>
+    </WhichlyContext.Provider>
   );
 }

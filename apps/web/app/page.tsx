@@ -1,12 +1,12 @@
-import { Block, Variant } from "@optio/react";
+import { Block, Variant } from "@whichly/react";
 
-const installSnippet = "npm install @optio/react";
+const installSnippet = "npm install @whichly/react";
 
-const codeSnippet = `import { OptioProvider, Block, Variant } from "@optio/react";
+const codeSnippet = `import { WhichlyProvider, Block, Variant } from "@whichly/react";
 
 export default function Page() {
   return (
-    <OptioProvider>
+    <WhichlyProvider>
       <Block name="Hero">
         <Variant name="Bold">
           <h1>Ship faster.</h1>
@@ -15,7 +15,7 @@ export default function Page() {
           <h1>Hey, want to ship faster?</h1>
         </Variant>
       </Block>
-    </OptioProvider>
+    </WhichlyProvider>
   );
 }`;
 
@@ -23,9 +23,9 @@ export default function HomePage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-16">
       <nav className="flex items-center justify-between mb-24">
-        <span className="text-lg font-semibold tracking-tight">optio</span>
+        <span className="text-lg font-semibold tracking-tight">whichly</span>
         <a
-          href="https://github.com/kapishdima/optio"
+          href="https://github.com/kapishdima/whichly"
           className="text-sm text-white/60 hover:text-white transition-colors"
         >
           GitHub →
@@ -117,10 +117,10 @@ export default function HomePage() {
       <footer className="border-t border-white/10 pt-8 pb-4 text-sm text-white/40 flex items-center justify-between">
         <span>MIT licensed. Open source.</span>
         <a
-          href="https://github.com/kapishdima/optio"
+          href="https://github.com/kapishdima/whichly"
           className="hover:text-white transition-colors"
         >
-          github.com/kapishdima/optio
+          github.com/kapishdima/whichly
         </a>
       </footer>
     </main>

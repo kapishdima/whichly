@@ -4,21 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Product
 
-**Optio** is an open-source React library that mounts a floating "variant picker" on a page. Developers wrap blocks in `<Block>` / `<Variant>`, share a staging link, and clients toggle between variants live on the real page. State is encoded in the URL (`?vp=block:variant,...`) so links are shareable.
+**Whichly** is an open-source React library that mounts a floating "variant picker" on a page. Developers wrap blocks in `<Block>` / `<Variant>`, share a staging link, and clients toggle between variants live on the real page. State is encoded in the URL (`?vp=block:variant,...`) so links are shareable.
 
 There is no backend, no dashboard, no auth — just a single React npm package and a landing page that dog-foods it.
 
 ## Repository layout
 
 ```
-optio/
+whichly/
 ├── apps/
-│   └── web/                  # Next.js landing page (dog-foods @optio/react)
+│   └── web/                  # Next.js landing page (dog-foods @whichly/react)
 ├── packages/
-│   └── react/                # @optio/react — the library
+│   └── react/                # @whichly/react — the library
 │       ├── src/
 │       │   ├── index.ts                # exports
-│       │   ├── provider.tsx            # OptioProvider: state, URL sync, shadow DOM portal
+│       │   ├── provider.tsx            # WhichlyProvider: state, URL sync, shadow DOM portal
 │       │   ├── block.tsx               # <Block name="...">
 │       │   ├── variant.tsx             # <Variant name="..."> with display:contents wrapper
 │       │   ├── url.ts                  # ?vp= parse/serialize
@@ -43,7 +43,7 @@ optio/
 - **Shadow DOM isolation.** Picker styles (Tailwind v4 + vendored shadcn) compile to a CSS string via `?inline` and inject into the shadow root at mount. Host page and picker can't bleed styles either way.
 - **Tailwind v4 + Shadow DOM.** v4 emits `:root, :host` for theme vars and rewrites `html` in preflight to `:host`, so no manual postprocessing.
 - **Radix Portals.** Vendored shadcn `DropdownMenu` reads the shadow root from `ShadowRootContext` and passes it to `DropdownMenuPrimitive.Portal` via the `container` prop, so dropdowns stay inside the shadow root.
-- **RSC compatibility.** `OptioProvider`, `Block`, `Variant` are `"use client"`. Server Components can import `Block`/`Variant` directly. The namespaced `Optio` object only works from client components (Next.js client references don't expose properties on Server Components).
+- **RSC compatibility.** `WhichlyProvider`, `Block`, `Variant` are `"use client"`. Server Components can import `Block`/`Variant` directly. The namespaced `Whichly` object only works from client components (Next.js client references don't expose properties on Server Components).
 
 ## Stack
 

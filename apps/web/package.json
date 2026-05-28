@@ -1,6 +1,6 @@
 {
-  "name": "@optio/web",
-  "version": "0.0.0",
+  "name": "@whichly/web",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,7 @@
     "lint": "biome check ."
   },
   "dependencies": {
-    "@optio/react": "workspace:*",
+    "@whichly/react": "workspace:*",
     "next": "^15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

@@ -9,6 +9,6 @@ We have a quick list of common questions to get you started engaging with this p
 
 ## Quick start
 
-1. Run `pnpm changeset` and follow the prompts. Pick `@optio/react`, choose a bump type (patch / minor / major), and write a short summary — it lands in the CHANGELOG.
+1. Run `pnpm changeset` and follow the prompts. Pick `@whichly/react`, choose a bump type (patch / minor / major), and write a short summary — it lands in the CHANGELOG.
 2. Commit the generated file in `.changeset/` together with your code changes.
-3. After merge to `main`, the `Release` workflow opens a "Version Packages" PR. Merging that PR publishes `@optio/react` to npm.
+3. After merge to `main`, the `Release` workflow opens a "Version Packages" PR. Merging that PR publishes `@whichly/react` to npm.

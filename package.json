@@ -1,5 +1,5 @@
 {
-  "name": "optio",
+  "name": "whichly",
   "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@9.15.0",
@@ -15,6 +15,7 @@
     "format": "biome format --write .",
     "typecheck": "pnpm -r typecheck",
     "changeset": "changeset",
+    "changeset:status": "changeset status --verbose",
     "version": "changeset version",
     "release": "pnpm build:packages && changeset publish"
   },
