@@ -18,7 +18,7 @@ export default defineConfig({
       fileName: (_format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: ["@whichly/core", "astro"],
+      external: ["@whichly/core", "astro", /\.astro$/],
     },
     sourcemap: true,
     minify: false,
