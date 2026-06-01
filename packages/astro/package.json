@@ -1,0 +1,57 @@
+{
+  "name": "@whichly/astro",
+  "version": "0.1.0",
+  "description": "Astro integration and components for Whichly variant previews.",
+  "license": "MIT",
+  "author": "kapishdima <kapishdima@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kapishdima/whichly.git",
+    "directory": "packages/astro"
+  },
+  "homepage": "https://github.com/kapishdima/whichly/tree/main/packages/astro#readme",
+  "bugs": {
+    "url": "https://github.com/kapishdima/whichly/issues"
+  },
+  "keywords": ["whichly", "astro", "variants", "ab-test", "staging", "client-review"],
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["components", "dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js"
+    },
+    "./components/WhichlyBlock.astro": "./components/WhichlyBlock.astro",
+    "./components/WhichlyVariant.astro": "./components/WhichlyVariant.astro"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": true,
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@whichly/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "astro": "^4.0.0 || ^5.0.0"
+  },
+  "devDependencies": {
+    "astro": "^5.0.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.4.0"
+  }
+}

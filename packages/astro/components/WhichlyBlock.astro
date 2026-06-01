@@ -1,0 +1,31 @@
+---
+export interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<style is:global>
+  [data-whichly-block] > [data-whichly-variant] {
+    display: none;
+  }
+
+  [data-whichly-block] > [data-whichly-variant]:first-of-type {
+    display: contents;
+  }
+</style>
+
+<script>
+  import { createWhichlyRuntime } from "@whichly/astro/runtime";
+
+  const win = window as Window & {
+    __whichlyRuntime?: ReturnType<typeof createWhichlyRuntime>;
+  };
+
+  win.__whichlyRuntime ??= createWhichlyRuntime();
+</script>
+
+<div data-whichly-block={name}>
+  <slot />
+</div>
