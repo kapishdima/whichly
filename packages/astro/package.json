@@ -1,6 +1,6 @@
 {
   "name": "@whichly/astro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Astro integration and components for Whichly variant previews.",
   "license": "MIT",
   "author": "kapishdima <kapishdima@gmail.com>",
