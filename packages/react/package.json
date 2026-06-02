@@ -1,6 +1,6 @@
 {
   "name": "@whichly/react",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Live variant picker for React. Show clients multiple block variants on a real staging page and let them toggle live.",
   "license": "MIT",
   "author": "kapishdima <kapishdima@gmail.com>",

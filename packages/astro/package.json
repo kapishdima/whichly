@@ -1,6 +1,6 @@
 {
   "name": "@whichly/astro",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Astro integration and components for Whichly variant previews.",
   "license": "MIT",
   "author": "kapishdima <kapishdima@gmail.com>",
@@ -13,12 +13,22 @@
   "bugs": {
     "url": "https://github.com/kapishdima/whichly/issues"
   },
-  "keywords": ["whichly", "astro", "variants", "ab-test", "staging", "client-review"],
+  "keywords": [
+    "whichly",
+    "astro",
+    "variants",
+    "ab-test",
+    "staging",
+    "client-review"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["components", "dist"],
+  "files": [
+    "components",
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -46,7 +56,7 @@
     "@whichly/core": "workspace:*"
   },
   "peerDependencies": {
-    "astro": "^4.0.0 || ^5.0.0"
+    "astro": "^4.0.0 || ^5.0.0 || ^6.0.0"
   },
   "devDependencies": {
     "astro": "^5.0.0",

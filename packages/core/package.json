@@ -1,6 +1,6 @@
 {
   "name": "@whichly/core",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Framework-agnostic DOM runtime for Whichly variant previews.",
   "license": "MIT",
   "author": "kapishdima <kapishdima@gmail.com>",
@@ -13,12 +13,21 @@
   "bugs": {
     "url": "https://github.com/kapishdima/whichly/issues"
   },
-  "keywords": ["whichly", "variants", "ab-test", "staging", "client-review", "astro"],
+  "keywords": [
+    "whichly",
+    "variants",
+    "ab-test",
+    "staging",
+    "client-review",
+    "astro"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

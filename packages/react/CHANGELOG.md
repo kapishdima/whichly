@@ -1,5 +1,11 @@
 # @whichly/react
 
+## 3.0.0
+
+### Major Changes
+
+- publish astro package
+
 ## 2.0.0
 
 ### Major Changes
