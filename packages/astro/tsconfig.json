@@ -1,7 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@whichly/core": ["../core/src/index.ts"]
+    }
   },
   "include": ["src/**/*.ts", "vite.config.ts"],
   "exclude": ["node_modules", "dist"]
