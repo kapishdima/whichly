@@ -1,8 +1,5 @@
 import type { AstroIntegration } from "astro";
 
-export { default as WhichlyBlock } from "../components/WhichlyBlock.astro";
-export { default as WhichlyVariant } from "../components/WhichlyVariant.astro";
-
 export interface WhichlyAstroOptions {
   /**
    * Render the built-in floating picker.
